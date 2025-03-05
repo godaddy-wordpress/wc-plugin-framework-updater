@@ -1,18 +1,20 @@
 #!/bin/bash
 
-ROOT_DIR="$(pwd)/"
+ROOT_DIR=$(pwd)
 echo "Detected plugin root: ${ROOT_DIR}"
 
+# parse the old version from the `FRAMEWORK_VERSION` constant
 OLD_VERSION=$1
 OLD_VERSION="$(find "${ROOT_DIR}" -maxdepth 1 -type f \( -name '*.php' \) -exec sed -nE "s/const FRAMEWORK_VERSION = '([0-9.]+)';/\1/p" {} \; | xargs)"
 echo "Detected old version: ${OLD_VERSION}"
 
-SV_FRAMEWORK_DIR="./vendor/skyverge/wc-plugin-framework/"
+SV_FRAMEWORK_DIR="${ROOT_DIR}/vendor/skyverge/wc-plugin-framework"
 if [ ! -d "${SV_FRAMEWORK_DIR}" ]; then
   echo "${SV_FRAMEWORK_DIR} does not exist."
 fi
 
-SV_FRAMEWORK_COMPOSER_FILE="${SV_FRAMEWORK_DIR}composer.json"
+# parse the new version from the framework package's composer.json file
+SV_FRAMEWORK_COMPOSER_FILE="${SV_FRAMEWORK_DIR}/composer.json"
 NEW_VERSION=$(jq -e -r .version "${SV_FRAMEWORK_COMPOSER_FILE}")
 
 echo "Detected new version: ${NEW_VERSION}"
@@ -35,11 +37,13 @@ NEW_NAMESPACE_STRING="v${NEW_VERSION_WITH_UNDERSCORES}"
 
 # replace namespace in entire code base EXCEPT node_modules and vendor; we're looking in PHP and JS files only
 echo "Replacing instances of ${OLD_NAMESPACE_STRING} with ${NEW_NAMESPACE_STRING} in path: ${ROOT_DIR}"
-NODE_MODULES_PATH="${ROOT_DIR}node_modules"
-VENDOR_PATH="${ROOT_DIR}vendor"
+NODE_MODULES_PATH="${ROOT_DIR}/node_modules"
+VENDOR_PATH="${ROOT_DIR}/vendor"
 
-find "${ROOT_DIR}" -not \( -path "${NODE_MODULES_PATH}" -prune \) -not \( -path "${VENDOR_PATH}" -prune \)  -type f \( -name '*.php' -o -name '*.js' \) -exec sed -i "s/${OLD_NAMESPACE_STRING}/${NEW_NAMESPACE_STRING}/g" {} \;
+find "${ROOT_DIR}/" -not \( -path "${NODE_MODULES_PATH}" -prune \) -not \( -path "${VENDOR_PATH}" -prune \)  -type f \( -name '*.php' -o -name '*.js' \) -exec sed -i "s/${OLD_NAMESPACE_STRING}/${NEW_NAMESPACE_STRING}/g" {} \;
 
 # replace framework version number
 echo "Updating FRAMEWORK_VERSION constant..."
-find "${ROOT_DIR}" -maxdepth 1 -type f \( -name '*.php' \) -exec sed -i "s/const FRAMEWORK_VERSION = '${OLD_VERSION}';/const FRAMEWORK_VERSION = '${NEW_VERSION}';/g" {} \;
+find "${ROOT_DIR}/" -maxdepth 1 -type f \( -name '*.php' \) -exec sed -i "s/const FRAMEWORK_VERSION = '${OLD_VERSION}';/const FRAMEWORK_VERSION = '${NEW_VERSION}';/g" {} \;
+
+echo "Update complete!"
