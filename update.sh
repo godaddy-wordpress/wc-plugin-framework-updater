@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "Running WC Plugin Framework Updater..."
+
 ROOT_DIR=$(pwd)
 echo "Detected plugin root: ${ROOT_DIR}"
 
