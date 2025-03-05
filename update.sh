@@ -22,7 +22,7 @@ NEW_VERSION=$(jq -e -r .version "${SV_FRAMEWORK_COMPOSER_FILE}")
 echo "Detected new version: ${NEW_VERSION}"
 
 if [[ "$OLD_VERSION" == "$NEW_VERSION" ]]; then
-  echo "Version has not changed... exiting..."
+  echo "Version has not changed - exiting."
   exit 0
 fi
 

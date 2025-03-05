@@ -8,9 +8,8 @@ This script helps facilitate updating the framework package, which involves repl
 
 Include this package as a dev dependency:
 
-```
+```json
 {
-  // ...
   "repositories": [
     {
       "type": "vcs",
@@ -33,6 +32,8 @@ Include this package as a dev dependency:
 
 ## Usage
 
+### Running manually
+
 1. First update the framework itself to your desired version:
 ```
 composer update skyverge/wc-plugin-framework
@@ -41,6 +42,30 @@ composer update skyverge/wc-plugin-framework
 ```
 ./vendor/skyverge/wc-plugin-framework-updater/update.sh
 ```
+
+### As a composer script
+
+You can set this up to run automatically after Composer packages are updated. Update your `composer.json` file like so:
+
+```json
+{
+  "scripts": {
+    "post-package-update": [
+      "./vendor/skyverge/wc-plugin-framework-updater/update.sh"
+    ]
+  }
+}
+```
+
+Then all you have to do is update the framework:
+
+```
+composer update skyverge/wc-plugin-framework
+```
+
+The updater script will then run automatically.
+
+**NOTE:** It will run after _any_ package is updated, but will exit if it detects that the framework version has not changed.
 
 ## Replacements made
 
