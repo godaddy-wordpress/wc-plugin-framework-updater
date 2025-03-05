@@ -6,8 +6,7 @@ ROOT_DIR=$(pwd)
 echo "Detected plugin root: ${ROOT_DIR}"
 
 # parse the old version from the `FRAMEWORK_VERSION` constant
-OLD_VERSION=$1
-OLD_VERSION="$(find "${ROOT_DIR}" -maxdepth 1 -type f \( -name '*.php' \) -exec sed -nE "s/const FRAMEWORK_VERSION = '([0-9.]+)';/\1/p" {} \; | xargs)"
+OLD_VERSION="$(find "${ROOT_DIR}" -maxdepth 1 -type f \( -name '*.php' \) -exec sed -nE "s/.* const FRAMEWORK_VERSION = '([0-9.]+)';/\1/p" {} \; | xargs)"
 echo "Detected old version: ${OLD_VERSION}"
 
 SV_FRAMEWORK_DIR="${ROOT_DIR}/vendor/skyverge/wc-plugin-framework"
@@ -46,8 +45,9 @@ NEW_NAMESPACE_STRING="v${NEW_VERSION_WITH_UNDERSCORES}"
 echo "Replacing instances of ${OLD_NAMESPACE_STRING} with ${NEW_NAMESPACE_STRING} in path: ${ROOT_DIR}"
 NODE_MODULES_PATH="${ROOT_DIR}/node_modules"
 VENDOR_PATH="${ROOT_DIR}/vendor"
+BUILD_PATH="${ROOT_DIR}/build"
 
-find "${ROOT_DIR}/" -not \( -path "${NODE_MODULES_PATH}" -prune \) -not \( -path "${VENDOR_PATH}" -prune \)  -type f \( -name '*.php' -o -name '*.js' \) -exec sed -i "s/${OLD_NAMESPACE_STRING}/${NEW_NAMESPACE_STRING}/g" {} \;
+find "${ROOT_DIR}/" -not \( -path "${NODE_MODULES_PATH}" -prune \) -not \( -path "${VENDOR_PATH}" -prune \) -not \( -path "${BUILD_PATH}" -prune \) -type f \( -name '*.php' -o -name '*.js' \) -exec sed -i "s/${OLD_NAMESPACE_STRING}/${NEW_NAMESPACE_STRING}/g" {} \;
 
 # replace framework version number
 echo "Updating FRAMEWORK_VERSION constant..."
