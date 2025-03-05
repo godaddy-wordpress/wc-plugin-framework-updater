@@ -1,0 +1,6 @@
+{
+  "name": "skyverge/wc-plugin-framework-updater",
+  "description": "Updater script for the SkyVerge WooCommerce plugin framework",
+  "version": "1.0.0",
+  "license": "GPL-3.0"
+}
