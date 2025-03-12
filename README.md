@@ -42,6 +42,7 @@ composer update skyverge/wc-plugin-framework
 ```
 ./vendor/skyverge/wc-plugin-framework-updater/update.sh
 ```
+Note: You will need to have the [jq](https://jqlang.org/download/) utility installed on your local machine to run `update.sh`.
 
 ### As a composer script
 
