@@ -6,8 +6,14 @@ ROOT_DIR=$(pwd)
 echo "Detected plugin root: ${ROOT_DIR}"
 
 # parse the old version from the `FRAMEWORK_VERSION` constant
-OLD_VERSION="$(find "${ROOT_DIR}" -maxdepth 1 -type f \( -name '*.php' \) -exec sed -nE "s/.* const FRAMEWORK_VERSION = '([0-9.]+)';/\1/p" {} \; | xargs)"
-echo "Detected old version: ${OLD_VERSION}"
+OLD_VERSION="$(find "${ROOT_DIR}" -maxdepth 1 -type f \( -name '*.php' \) -exec sed -nE "s/.*const FRAMEWORK_VERSION = '([0-9.]+)';/\1/p" {} \; | xargs)"
+
+if [[ -z "$OLD_VERSION" ]]; then
+  echo "Unable to detect old version - we cannot proceed!"
+  exit 1
+else
+  echo "Detected old version: ${OLD_VERSION}"
+fi
 
 SV_FRAMEWORK_DIR="${ROOT_DIR}/vendor/skyverge/wc-plugin-framework"
 if [ ! -d "${SV_FRAMEWORK_DIR}" ]; then
@@ -27,8 +33,7 @@ fi
 
 read -p "Proceed with replacements? [y/n]" -n 1 -r
 echo    # move to a new line
-if [[ ! $REPLY =~ ^[Yy]$ ]]
-then
+if [[ ! $REPLY =~ ^[Yy]$ ]]; then
     [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1
 fi
 
