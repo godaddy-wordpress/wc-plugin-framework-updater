@@ -52,7 +52,7 @@ You can set this up to run automatically after Composer packages are updated. Up
 {
   "scripts": {
     "post-package-update": [
-      "./vendor/skyverge/wc-plugin-framework-updater/update.sh"
+      "if [ -f ./vendor/skyverge/wc-plugin-framework-updater/update.sh ]; then ./vendor/skyverge/wc-plugin-framework-updater/update.sh; fi"
     ]
   }
 }
