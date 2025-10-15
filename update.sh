@@ -1,8 +1,8 @@
 #!/bin/bash
 
 echo "Running WC Plugin Framework Updater..."
-
 ROOT_DIR=$(pwd)
+ROOT_DIR+=${1:-""} # Allow optionally passing a subdirectory, e.g. /plugin
 echo "Detected plugin root: ${ROOT_DIR}"
 
 # parse the old version from the `FRAMEWORK_VERSION` constant
