@@ -2,7 +2,14 @@
 
 echo "Running WC Plugin Framework Updater..."
 
-ROOT_DIR=$(pwd)
+ROOT_DIR="${1:-"$(pwd)"}" # Allow optionally passing a specific path (e.g. ./plugin), otherwise default to the current directory
+ROOT_DIR="$(realpath "${ROOT_DIR}")" # convert to absolute path
+
+if [[ ! -d "$ROOT_DIR" ]]; then
+  echo "Provided root directory does not exist: ${ROOT_DIR}"
+  exit 1
+fi
+
 echo "Detected plugin root: ${ROOT_DIR}"
 
 # parse the old version from the `FRAMEWORK_VERSION` constant

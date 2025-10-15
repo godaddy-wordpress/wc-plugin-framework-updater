@@ -78,3 +78,19 @@ The script does the following:
     - Excludes `node_modules/`
     - Excludes `vendor/`
 4. Updates the `FRAMEWORK_VERSION` constant number.
+
+## Working directory
+
+By default running the script will modify files in the current working directory. If you need to specify a different directory then pass it in as the first argument. Examples:
+
+Absolute path:
+
+```
+./vendor/skyverge/wc-plugin-framework-updater/update.sh /path/to/your/plugin
+```
+
+Relative path:
+
+```
+./vendor/skyverge/wc-plugin-framework-updater/update.sh ./plugin/
+```
